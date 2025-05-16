@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog CMS</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="./css/main.css">
+
+  <!-- <script src="https://cdn.ckeditor.com/4.25.1-lts/standard-all/ckeditor.js"></script> -->
+  <script src="./ckeditor/ckeditor5/ckeditor5.umd.js"></script>
+  <script src="./js/materialize.min.js"></script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    #post-list {
+      margin-top: 20px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+
+    .post-item {
+      background: #f9f9f9;
+      border: 1px solid #eee;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .post-item:hover {
+      background: #f0f0f0;
+    }
+
+    .post-item span {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+
+    .ckeditor-container {
+      margin-bottom: 10px;
+    }
+
+    #message {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .success {
+      background-color: #dff0d8;
+      color: #3c763d;
+      border: 1px solid #d6e9c6;
+    }
+
+    .error {
+      background-color: #f2dede;
+      color: #a94442;
+      border: 1px solid #ebccd1;
+    }
+  </style>
+
+  <link rel="stylesheet" href="./ckeditor/ckeditor5/ckeditor5.css">
+</head>
+
+<body>
+  <main class="container">
+    <div id="login-container">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Login</span>
+          <div class="input-field">
+            <input type="email" id="login-email" class="validate">
+            <label for="login-email">Email</label>
+          </div>
+          <div class="input-field">
+            <input type="password" id="login-password" class="validate">
+            <label for="login-password">Password</label>
+          </div>
+          <p id="login-error" class="error" style="display: none; margin-top: 10px;"></p>
+        </div>
+        <div class="card-action" style="text-align: right;">
+          <button id="login-button" class="btn waves-effect waves-light">Login</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cms-container" style="display: none;">
+      <div class="row" style="margin-bottom: 0;">
+        <div class="col s12">
+          <h2 class="center-align">cms.cezary-czerwinski.pl</h2>
+        </div>
+        <div class="col s12" style="text-align: right; padding-top: 20px;">
+          <button id="logout-button" class="btn waves-effect waves-light red">
+            <i class="material-icons left">exit_to_app</i>Logout
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">Create/Edit Post</span>
+              <input type="hidden" id="post-id">
+
+              <div class="input-field">
+                <input type="text" id="post-slug">
+                <label for="post-slug">Slug (URL part)</label>
+              </div>
+              <div class="input-field">
+                <input type="date" id="post-date" value="">
+                <label for="post-date" class="active">Date</label>
+              </div>
+              <div class="input-field">
+                <input type="text" id="post-category">
+                <label for="post-category">Category</label>
+              </div>
+              <div class="input-field">
+                <textarea id="post-excerpt" class="materialize-textarea"></textarea>
+                <label for="post-excerpt">Excerpt</label>
+              </div>
+              <div class="input-field">
+                <input type="text" id="post-tags">
+                <label for="post-tags">Tags (comma‑separated)</label>
+              </div>
+              <div class="input-field">
+                <input type="text" id="post-reading-time">
+                <label for="post-reading-time">Reading Time</label>
+              </div>
+
+              <div class="input-field">
+                <input type="text" id="post-title">
+                <label for="post-title">Post Title</label>
+              </div>
+
+              <label style="font-size: 0.8rem; color: #9e9e9e; display: block; margin-top:15px;">Post Content</label>
+              <div class="ckeditor-container">
+                <textarea id="editor1" name="editor1"></textarea>
+              </div>
+
+
+              <div class="input-field file-field">
+                <!-- <label for="hero-img-input" style="display:block; margin-bottom: .5rem;">Hero Image</label>
+                <input type="file" id="hero-img-input" accept="image/*" class="btn">
+                <img id="hero-img-preview" style="max-width:100%; display:none; margin-top:.5rem;" /> -->
+                <div class="btn">
+                  <span>Hero image</span>
+                  <input type="file" accept="image/*">
+                </div>
+                <div class="file-path-wrapper">
+                  <input type="text" class="file-path validate">
+                </div>
+              </div>
+
+              <div class="button-group">
+                <button id="save-post-button" class="btn waves-effect waves-light">
+                  <i class="material-icons left">save</i>Save Post
+                </button>
+                <button id="new-post-button" class="btn waves-effect waves-light">
+                  <i class="material-icons left">add_circle_outline</i>New Post
+                </button>
+                <button id="delete-post-button" class="btn waves-effect waves-light delete-button" style="display: none;">
+                  <i class="material-icons left">delete</i>Delete Post
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col s12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">Existing Posts</span>
+              <ul id="posts-ul" class="collection">
+                <li class="collection-item">Loading posts...</li>
+                <!-- Example post item structure (you'd generate this dynamically)
+                <li class="collection-item avatar">
+                  <i class="material-icons circle green">folder</i>
+                  <span class="title">Post Title 1</span>
+                  <p>Short snippet or date here <br>
+                     Second line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">edit</i></a>
+                </li>
+                -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="message" style="display: none;"></div> <!-- This can be styled further or replaced with Materialize Toasts -->
+    </div>
+  </main>
+
+  <script>
+    const {
+      ClassicEditor,
+      Alignment,
+      AutoImage,
+      AutoLink,
+      Autosave,
+      BlockQuote,
+      Bold,
+      Bookmark,
+      CloudServices,
+      Code,
+      CodeBlock,
+      Essentials,
+      FontBackgroundColor,
+      FontColor,
+      FontFamily,
+      FontSize,
+      GeneralHtmlSupport,
+      Heading,
+      Highlight,
+      HorizontalLine,
+      HtmlComment,
+      HtmlEmbed,
+      ImageBlock,
+      ImageCaption,
+      ImageInline,
+      ImageInsert,
+      ImageInsertViaUrl,
+      ImageStyle,
+      ImageTextAlternative,
+      ImageToolbar,
+      ImageUpload,
+      Indent,
+      IndentBlock,
+      Italic,
+      Link,
+      LinkImage,
+      Paragraph,
+      PlainTableOutput,
+      RemoveFormat,
+      ShowBlocks,
+      SimpleUploadAdapter,
+      SourceEditing,
+      SpecialCharacters,
+      SpecialCharactersArrows,
+      SpecialCharactersCurrency,
+      SpecialCharactersEssentials,
+      SpecialCharactersLatin,
+      SpecialCharactersMathematical,
+      SpecialCharactersText,
+      Strikethrough,
+      Style,
+      Subscript,
+      Superscript,
+      Table,
+      TableCaption,
+      TableCellProperties,
+      TableColumnResize,
+      TableLayout,
+      TableProperties,
+      TableToolbar,
+      TextPartLanguage,
+      Title,
+      Underline,
+      WordCount
+    } = window.CKEDITOR;
+
+    const LICENSE_KEY =
+      'GPL';
+
+    const editorConfig = {
+      toolbar: {
+        items: [
+          'undo',
+          'redo',
+          '|',
+          'sourceEditing',
+          'showBlocks',
+          'textPartLanguage',
+          '|',
+          'heading',
+          'style',
+          '|',
+          'fontSize',
+          'fontFamily',
+          'fontColor',
+          'fontBackgroundColor',
+          '|',
+          'bold',
+          'italic',
+          'underline',
+          'strikethrough',
+          'subscript',
+          'superscript',
+          'code',
+          'removeFormat',
+          '|',
+          'specialCharacters',
+          'horizontalLine',
+          'link',
+          'bookmark',
+          'insertImage',
+          'insertImageViaUrl',
+          'insertTable',
+          'insertTableLayout',
+          'highlight',
+          'blockQuote',
+          'codeBlock',
+          'htmlEmbed',
+          '|',
+          'alignment',
+          '|',
+          'outdent',
+          'indent'
+        ],
+        shouldNotGroupWhenFull: false
+      },
+      plugins: [
+        Alignment,
+        AutoImage,
+        AutoLink,
+        Autosave,
+        BlockQuote,
+        Bold,
+        Bookmark,
+        CloudServices,
+        Code,
+        CodeBlock,
+        Essentials,
+        FontBackgroundColor,
+        FontColor,
+        FontFamily,
+        FontSize,
+        GeneralHtmlSupport,
+        Heading,
+        Highlight,
+        HorizontalLine,
+        HtmlComment,
+        HtmlEmbed,
+        ImageBlock,
+        ImageCaption,
+        ImageInline,
+        ImageInsert,
+        ImageInsertViaUrl,
+        ImageStyle,
+        ImageTextAlternative,
+        ImageToolbar,
+        ImageUpload,
+        Indent,
+        IndentBlock,
+        Italic,
+        Link,
+        LinkImage,
+        Paragraph,
+        PlainTableOutput,
+        RemoveFormat,
+        ShowBlocks,
+        SimpleUploadAdapter,
+        SourceEditing,
+        SpecialCharacters,
+        SpecialCharactersArrows,
+        SpecialCharactersCurrency,
+        SpecialCharactersEssentials,
+        SpecialCharactersLatin,
+        SpecialCharactersMathematical,
+        SpecialCharactersText,
+        Strikethrough,
+        Style,
+        Subscript,
+        Superscript,
+        Table,
+        TableCaption,
+        TableCellProperties,
+        TableColumnResize,
+        TableLayout,
+        TableProperties,
+        TableToolbar,
+        TextPartLanguage,
+        Title,
+        Underline,
+        WordCount
+      ],
+      fontFamily: {
+        supportAllValues: true
+      },
+      fontSize: {
+        options: [10, 12, 14, 'default', 18, 20, 22],
+        supportAllValues: true
+      },
+      heading: {
+        options: [
+          {
+            model: 'paragraph',
+            title: 'Paragraph',
+            class: 'ck-heading_paragraph'
+          },
+          {
+            model: 'heading1',
+            view: 'h1',
+            title: 'Heading 1',
+            class: 'ck-heading_heading1'
+          },
+          {
+            model: 'heading2',
+            view: 'h2',
+            title: 'Heading 2',
+            class: 'ck-heading_heading2'
+          },
+          {
+            model: 'heading3',
+            view: 'h3',
+            title: 'Heading 3',
+            class: 'ck-heading_heading3'
+          },
+          {
+            model: 'heading4',
+            view: 'h4',
+            title: 'Heading 4',
+            class: 'ck-heading_heading4'
+          },
+          {
+            model: 'heading5',
+            view: 'h5',
+            title: 'Heading 5',
+            class: 'ck-heading_heading5'
+          },
+          {
+            model: 'heading6',
+            view: 'h6',
+            title: 'Heading 6',
+            class: 'ck-heading_heading6'
+          }
+        ]
+      },
+      htmlSupport: {
+        allow: [
+          {
+            name: /^.*$/,
+            styles: true,
+            attributes: true,
+            classes: true
+          }
+        ]
+      },
+      image: {
+        toolbar: ['toggleImageCaption', 'imageTextAlternative', '|', 'imageStyle:inline', 'imageStyle:wrapText', 'imageStyle:breakText']
+      },
+      initialData:
+        '<h2>Enter title</h2><div>Put content</div>',
+      licenseKey: LICENSE_KEY,
+      link: {
+        addTargetToExternalLinks: true,
+        defaultProtocol: 'https://',
+        decorators: {
+          toggleDownloadable: {
+            mode: 'manual',
+            label: 'Downloadable',
+            attributes: {
+              download: 'file'
+            }
+          }
+        }
+      },
+      menuBar: {
+        isVisible: true
+      },
+      placeholder: 'Type or paste your content here!',
+      style: {
+        definitions: [
+          {
+            name: 'Article category',
+            element: 'h3',
+            classes: ['category']
+          },
+          {
+            name: 'Title',
+            element: 'h2',
+            classes: ['document-title']
+          },
+          {
+            name: 'Subtitle',
+            element: 'h3',
+            classes: ['document-subtitle']
+          },
+          {
+            name: 'Info box',
+            element: 'p',
+            classes: ['info-box']
+          },
+          {
+            name: 'CTA Link Primary',
+            element: 'a',
+            classes: ['button', 'button--green']
+          },
+          {
+            name: 'CTA Link Secondary',
+            element: 'a',
+            classes: ['button', 'button--black']
+          },
+          {
+            name: 'Marker',
+            element: 'span',
+            classes: ['marker']
+          },
+          {
+            name: 'Spoiler',
+            element: 'span',
+            classes: ['spoiler']
+          }
+        ]
+      },
+      table: {
+        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties']
+      }
+    };
+
+  </script>
+  <script>
+    const awaitForObject = object => {
+      return new Promise((resolve, _reject) => {
+        setInterval(() => {
+          if (object) {
+            resolve(object);
+          }
+        }, 100);
+      });
+    };
+
+    // Your web app's Firebase configuration
+    // Replace with your actual config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEiGe94VepHS85NG7gOS47MynMBdHsqFQ",
+      authDomain: "cezary-czerwinski-pl.firebaseapp.com",
+      projectId: "cezary-czerwinski-pl",
+      storageBucket: "cezary-czerwinski-pl.firebasestorage.app",
+      messagingSenderId: "579328886251",
+      appId: "1:579328886251:web:2365538a3cdbe261e605ae"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    const loginContainer = document.getElementById('login-container');
+    const cmsContainer = document.getElementById('cms-container');
+    const loginEmailInput = document.getElementById('login-email');
+    const loginPasswordInput = document.getElementById('login-password');
+    const loginButton = document.getElementById('login-button');
+    const loginError = document.getElementById('login-error');
+    const logoutButton = document.getElementById('logout-button');
+
+    const postIdInput = document.getElementById('post-id');
+    const postTitleInput = document.getElementById('post-title');
+    const postsUl = document.getElementById('posts-ul');
+    const savePostButton = document.getElementById('save-post-button');
+    const newPostButton = document.getElementById('new-post-button');
+    const deletePostButton = document.getElementById('delete-post-button');
+    const messageDiv = document.getElementById('message');
+
+    let editor; 
+
+    ClassicEditor.create(document.querySelector('#editor1'), editorConfig).then(editor => {
+      // const wordCount = editor.plugins.get('WordCount');
+      // document.querySelector('#editor-word-count').appendChild(wordCount.wordCountContainer);
+
+      // document.querySelector('#editor-menu-bar').appendChild(editor.ui.view.menuBarView.element);
+
+      window.editor = editor; // Make the editor instance globally accessible
+
+      awaitForObject(auth).then(_=>{
+        auth.onAuthStateChanged(user => {
+          if (user) {
+            fetchPosts(); // Fetch posts when user logs in and editor is ready
+          }
+        });
+      });
+      return editor;
+    });
+
+    // Listen for auth state changes
+    awaitForObject(auth).then(_=>{
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          // User is signed in
+          loginContainer.style.display = 'none';
+          cmsContainer.style.display = 'block';
+          loginError.style.display = 'none';
+          if (editor) {
+            fetchPosts(); // Fetch posts when user logs in and editor is ready
+          } else {
+            console.log("CKEditor not ready, will fetch posts when it is.");
+          }
+        } else {
+          // User is signed out
+          loginContainer.style.display = 'block';
+          cmsContainer.style.display = 'none';
+          clearPostForm(); // Clear form when logging out
+          postsUl.innerHTML = ''; // Clear post list
+        }
+      });
+    });
+
+    // Handle login
+    loginButton.addEventListener('click', async () => {
+      const email = loginEmailInput.value;
+      const password = loginPasswordInput.value;
+
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        // Auth state change listener will handle UI update
+      } catch (error) {
+        console.error("Login Error:", error);
+        loginError.textContent = error.message;
+        loginError.style.display = 'block';
+      }
+    });
+
+    // Handle logout
+    logoutButton.addEventListener('click', async () => {
+      try {
+        await auth.signOut();
+        // Auth state change listener will handle UI update
+        showMessage('Logged out successfully.', 'success');
+      } catch (error) {
+        console.error("Logout Error:", error);
+        showMessage('Error logging out.', 'error');
+      }
+    });
+
+    // --- Firestore Operations ---
+
+    // Fetch and display posts
+    async function fetchPosts() {
+      // if (!editor) {
+      //   console.log("CKEditor not ready, cannot fetch posts yet.");
+      //   return; // Don't fetch if editor isn't ready
+      // }
+      postsUl.innerHTML = '<li>Loading posts...</li>'; // Show loading state
+      try {
+        const snapshot = await db.collection('posts').orderBy('createdAt', 'desc').get();
+        postsUl.innerHTML = ''; // Clear loading state
+
+        if (snapshot.empty) {
+          postsUl.innerHTML = '<li>No posts found.</li>';
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const post = doc.data();
+          const li = document.createElement('li');
+          li.classList.add('post-item');
+          li.dataset.id = doc.id;
+          li.innerHTML = `<span>${post.title}</span> <button class="delete-button">Delete</button>`;
+          li.querySelector('span').addEventListener('click', () => loadPostForEditing(doc.id));
+          li.querySelector('.delete-button').addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent triggering loadPostForEditing
+            deletePost(doc.id);
+          });
+          postsUl.appendChild(li);
+        });
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        postsUl.innerHTML = '<li>Error loading posts.</li>';
+        showMessage('Error fetching posts.', 'error');
+      }
+    }
+
+    // Load a post into the form for editing
+    async function loadPostForEditing(postId) {
+      try {
+        const doc = await db.collection('posts').doc(postId).get();
+        if (doc.exists) {
+          const post = doc.data();
+          postIdInput.value = doc.id;
+          postTitleInput.value = post.title;
+          window.editor.setData(post.content); // Load content into CKEditor
+          deletePostButton.style.display = 'inline-block'; // Show delete button
+          showMessage(`Editing post: "${post.title}"`, 'success');
+        } else {
+          console.warn("Post not found:", postId);
+          showMessage('Post not found.', 'error');
+        }
+      } catch (error) {
+        console.error("Error loading post:", error);
+        showMessage('Error loading post for editing.', 'error');
+      }
+    }
+
+    // Save or update a post
+    savePostButton.addEventListener('click', async () => {
+      const postId = postIdInput.value;
+      const title = postTitleInput.value;
+      const content = window.editor.getData(); // Get data from CKEditor
+
+      if (!title || !content) {
+        showMessage('Title and content cannot be empty.', 'error');
+        return;
+      }
+
+      const postData = {
+        title: title,
+        content: content,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+
+      try {
+        if (postId) {
+          // Update existing post
+          await db.collection('posts').doc(postId).update(postData);
+          showMessage('Post updated successfully!', 'success');
+        } else {
+          // Create new post
+          postData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          await db.collection('posts').add(postData);
+          showMessage('Post created successfully!', 'success');
+          clearPostForm(); // Clear form after creating a new post
+        }
+        fetchPosts(); // Refresh the list
+      } catch (error) {
+        console.error("Error saving post:", error);
+        showMessage('Error saving post.', 'error');
+      }
+    });
+
+    // Clear the post form for a new post
+    newPostButton.addEventListener('click', () => {
+      clearPostForm();
+      showMessage('Ready to create a new post.', 'success');
+    });
+
+    function clearPostForm() {
+      postIdInput.value = '';
+      postTitleInput.value = '';
+      window.editor.setData(''); // Clear CKEditor content
+      deletePostButton.style.display = 'none'; // Hide delete button
+    }
+
+    // Delete a post
+    async function deletePost(postId) {
+      if (confirm('Are you sure you want to delete this post?')) {
+        try {
+          // Delete the document from Firestore
+          await db.collection('posts').doc(postId).delete();
+
+          // TODO: Implement deletion of associated files from Storage if any were linked.
+          // This would involve parsing the post.content HTML for image URLs pointing to your Storage bucket
+          // and deleting those files. This is complex and omitted for this basic example.
+
+          showMessage('Post deleted successfully!', 'success');
+          clearPostForm(); // Clear form if the deleted post was being edited
+          fetchPosts(); // Refresh the list
+        } catch (error) {
+          console.error("Error deleting post:", error);
+          showMessage('Error deleting post.', 'error');
+        }
+      }
+    }
+
+
+    // --- Utility Functions ---
+
+    function showMessage(msg, type) {
+      messageDiv.textContent = msg;
+      messageDiv.className = ''; // Clear previous classes
+      messageDiv.classList.add(type); // Add success or error class
+      messageDiv.style.display = 'block';
+      // Optional: Hide message after a few seconds
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 5000);
+    }
+
+  </script>
+</body>
+
+</html>
