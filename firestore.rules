@@ -1,7 +1,16 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Match the 'posts' collection
+    match /posts/{postId} {
+      // Allow anyone to read posts
+      allow read: if true;
+
+      // Allow write (create, update, delete) only if the user is authenticated
+      allow write, delete: if request.auth != null;
+    }
+
+    // Keep the default rule to deny access to other collections
     match /{document=**} {
       allow read, write: if false;
     }

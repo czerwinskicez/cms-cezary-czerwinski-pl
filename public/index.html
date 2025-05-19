@@ -158,9 +158,6 @@
 
 
               <div class="input-field file-field">
-                <!-- <label for="hero-img-input" style="display:block; margin-bottom: .5rem;">Hero Image</label>
-                <input type="file" id="hero-img-input" accept="image/*" class="btn">
-                <img id="hero-img-preview" style="max-width:100%; display:none; margin-top:.5rem;" /> -->
                 <div class="btn">
                   <span>Hero image</span>
                   <input type="file" accept="image/*">
@@ -177,7 +174,8 @@
                 <button id="new-post-button" class="btn waves-effect waves-light">
                   <i class="material-icons left">add_circle_outline</i>New Post
                 </button>
-                <button id="delete-post-button" class="btn waves-effect waves-light delete-button" style="display: none;">
+                <button id="delete-post-button" class="btn waves-effect waves-light delete-button"
+                  style="display: none;">
                   <i class="material-icons left">delete</i>Delete Post
                 </button>
               </div>
@@ -191,91 +189,18 @@
               <span class="card-title">Existing Posts</span>
               <ul id="posts-ul" class="collection">
                 <li class="collection-item">Loading posts...</li>
-                <!-- Example post item structure (you'd generate this dynamically)
-                <li class="collection-item avatar">
-                  <i class="material-icons circle green">folder</i>
-                  <span class="title">Post Title 1</span>
-                  <p>Short snippet or date here <br>
-                     Second line
-                  </p>
-                  <a href="#!" class="secondary-content"><i class="material-icons">edit</i></a>
-                </li>
-                -->
               </ul>
             </div>
           </div>
         </div>
       </div>
-      <div id="message" style="display: none;"></div> <!-- This can be styled further or replaced with Materialize Toasts -->
+      <div id="message" style="display: none;"></div>
     </div>
   </main>
 
   <script>
     const {
-      ClassicEditor,
-      Alignment,
-      AutoImage,
-      AutoLink,
-      Autosave,
-      BlockQuote,
-      Bold,
-      Bookmark,
-      CloudServices,
-      Code,
-      CodeBlock,
-      Essentials,
-      FontBackgroundColor,
-      FontColor,
-      FontFamily,
-      FontSize,
-      GeneralHtmlSupport,
-      Heading,
-      Highlight,
-      HorizontalLine,
-      HtmlComment,
-      HtmlEmbed,
-      ImageBlock,
-      ImageCaption,
-      ImageInline,
-      ImageInsert,
-      ImageInsertViaUrl,
-      ImageStyle,
-      ImageTextAlternative,
-      ImageToolbar,
-      ImageUpload,
-      Indent,
-      IndentBlock,
-      Italic,
-      Link,
-      LinkImage,
-      Paragraph,
-      PlainTableOutput,
-      RemoveFormat,
-      ShowBlocks,
-      SimpleUploadAdapter,
-      SourceEditing,
-      SpecialCharacters,
-      SpecialCharactersArrows,
-      SpecialCharactersCurrency,
-      SpecialCharactersEssentials,
-      SpecialCharactersLatin,
-      SpecialCharactersMathematical,
-      SpecialCharactersText,
-      Strikethrough,
-      Style,
-      Subscript,
-      Superscript,
-      Table,
-      TableCaption,
-      TableCellProperties,
-      TableColumnResize,
-      TableLayout,
-      TableProperties,
-      TableToolbar,
-      TextPartLanguage,
-      Title,
-      Underline,
-      WordCount
+      ClassicEditor, Alignment, AutoImage, AutoLink, Autosave, BlockQuote, Bold, Bookmark, CloudServices, Code, CodeBlock, Essentials, FontBackgroundColor, FontColor, FontFamily, FontSize, GeneralHtmlSupport, Heading, Highlight, HorizontalLine, HtmlComment, HtmlEmbed, ImageBlock, ImageCaption, ImageInline, ImageInsert, ImageInsertViaUrl, ImageStyle, ImageTextAlternative, ImageToolbar, ImageUpload, Indent, IndentBlock, Italic, Link, LinkImage, Paragraph, PlainTableOutput, RemoveFormat, ShowBlocks, SimpleUploadAdapter, SourceEditing, SpecialCharacters, SpecialCharactersArrows, SpecialCharactersCurrency, SpecialCharactersEssentials, SpecialCharactersLatin, SpecialCharactersMathematical, SpecialCharactersText, Strikethrough, Style, Subscript, Superscript, Table, TableCaption, TableCellProperties, TableColumnResize, TableLayout, TableProperties, TableToolbar, TextPartLanguage, Title, Underline, WordCount
     } = window.CKEDITOR;
 
     const LICENSE_KEY =
@@ -284,114 +209,12 @@
     const editorConfig = {
       toolbar: {
         items: [
-          'undo',
-          'redo',
-          '|',
-          'sourceEditing',
-          'showBlocks',
-          'textPartLanguage',
-          '|',
-          'heading',
-          'style',
-          '|',
-          'fontSize',
-          'fontFamily',
-          'fontColor',
-          'fontBackgroundColor',
-          '|',
-          'bold',
-          'italic',
-          'underline',
-          'strikethrough',
-          'subscript',
-          'superscript',
-          'code',
-          'removeFormat',
-          '|',
-          'specialCharacters',
-          'horizontalLine',
-          'link',
-          'bookmark',
-          'insertImage',
-          'insertImageViaUrl',
-          'insertTable',
-          'insertTableLayout',
-          'highlight',
-          'blockQuote',
-          'codeBlock',
-          'htmlEmbed',
-          '|',
-          'alignment',
-          '|',
-          'outdent',
-          'indent'
+          'undo', 'redo', '|', 'sourceEditing', 'showBlocks', 'textPartLanguage', '|', 'heading', 'style', '|', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'code', 'removeFormat', '|', 'specialCharacters', 'horizontalLine', 'link', 'bookmark', 'insertImage', 'insertImageViaUrl', 'insertTable', 'insertTableLayout', 'highlight', 'blockQuote', 'codeBlock', 'htmlEmbed', '|', 'alignment', '|', 'outdent', 'indent'
         ],
         shouldNotGroupWhenFull: false
       },
       plugins: [
-        Alignment,
-        AutoImage,
-        AutoLink,
-        Autosave,
-        BlockQuote,
-        Bold,
-        Bookmark,
-        CloudServices,
-        Code,
-        CodeBlock,
-        Essentials,
-        FontBackgroundColor,
-        FontColor,
-        FontFamily,
-        FontSize,
-        GeneralHtmlSupport,
-        Heading,
-        Highlight,
-        HorizontalLine,
-        HtmlComment,
-        HtmlEmbed,
-        ImageBlock,
-        ImageCaption,
-        ImageInline,
-        ImageInsert,
-        ImageInsertViaUrl,
-        ImageStyle,
-        ImageTextAlternative,
-        ImageToolbar,
-        ImageUpload,
-        Indent,
-        IndentBlock,
-        Italic,
-        Link,
-        LinkImage,
-        Paragraph,
-        PlainTableOutput,
-        RemoveFormat,
-        ShowBlocks,
-        SimpleUploadAdapter,
-        SourceEditing,
-        SpecialCharacters,
-        SpecialCharactersArrows,
-        SpecialCharactersCurrency,
-        SpecialCharactersEssentials,
-        SpecialCharactersLatin,
-        SpecialCharactersMathematical,
-        SpecialCharactersText,
-        Strikethrough,
-        Style,
-        Subscript,
-        Superscript,
-        Table,
-        TableCaption,
-        TableCellProperties,
-        TableColumnResize,
-        TableLayout,
-        TableProperties,
-        TableToolbar,
-        TextPartLanguage,
-        Title,
-        Underline,
-        WordCount
+        Alignment, AutoImage, AutoLink, Autosave, BlockQuote, Bold, Bookmark, CloudServices, Code, CodeBlock, Essentials, FontBackgroundColor, FontColor, FontFamily, FontSize, GeneralHtmlSupport, Heading, Highlight, HorizontalLine, HtmlComment, HtmlEmbed, ImageBlock, ImageCaption, ImageInline, ImageInsert, ImageInsertViaUrl, ImageStyle, ImageTextAlternative, ImageToolbar, ImageUpload, Indent, IndentBlock, Italic, Link, LinkImage, Paragraph, PlainTableOutput, RemoveFormat, ShowBlocks, SimpleUploadAdapter, SourceEditing, SpecialCharacters, SpecialCharactersArrows, SpecialCharactersCurrency, SpecialCharactersEssentials, SpecialCharactersLatin, SpecialCharactersMathematical, SpecialCharactersText, Strikethrough, Style, Subscript, Superscript, Table, TableCaption, TableCellProperties, TableColumnResize, TableLayout, TableProperties, TableToolbar, TextPartLanguage, Title, Underline, WordCount
       ],
       fontFamily: {
         supportAllValues: true
@@ -573,7 +396,7 @@
     const deletePostButton = document.getElementById('delete-post-button');
     const messageDiv = document.getElementById('message');
 
-    let editor; 
+    let editor;
 
     ClassicEditor.create(document.querySelector('#editor1'), editorConfig).then(editor => {
       // const wordCount = editor.plugins.get('WordCount');
@@ -583,7 +406,7 @@
 
       window.editor = editor; // Make the editor instance globally accessible
 
-      awaitForObject(auth).then(_=>{
+      awaitForObject(auth).then(_ => {
         auth.onAuthStateChanged(user => {
           if (user) {
             fetchPosts(); // Fetch posts when user logs in and editor is ready
@@ -594,7 +417,7 @@
     });
 
     // Listen for auth state changes
-    awaitForObject(auth).then(_=>{
+    awaitForObject(auth).then(_ => {
       auth.onAuthStateChanged(user => {
         if (user) {
           // User is signed in

@@ -1,12 +1,12 @@
 {
   "dependencies": {
     "materialize-css": "^1.0.0",
-    "sass": "^1.89.0"
+    "sass": "^1.89.0",
+    "uuid": "^11.1.0"
   },
   "name": "cezary-czerwinski-pl-firebase",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "build": "sass node_modules/materialize-css/sass/materialize.scss public/css/main.css --style compressed"
   },
