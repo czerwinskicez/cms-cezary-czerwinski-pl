@@ -1,14 +1,15 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // Only allow public read & authenticated writes under /post_images/{uid}/...
-    match /post_images/{userId}/{allPaths=**} {
-      // Anyone (even unauthenticated) can read post images
+    // Allow public read & authenticated writes under /post_images/{uid}/... and /blog_images/{uid}/...
+    match /{imageType}/{userId}/{allPaths=**} {
+      // Anyone (even unauthenticated) can read images
       allow read: if true;
 
       // Only an authenticated user can upload/update/delete, and only in their own folder
       allow write: if request.auth != null
-                   && request.auth.uid == userId;
+                   && request.auth.uid == userId
+                   && (imageType == 'post_images' || imageType == 'blog_images');
     }
 
     // Deny access to everything else

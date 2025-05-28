@@ -15,6 +15,7 @@
 
   <script src="./ckeditor/ckeditor5/ckeditor5.umd.js"></script>
   <script src="./js/materialize.min.js"></script>
+  <script src="./ckeditor/firebase-upload-adapter.js" type="module"></script>
 
   <style>
     body {
@@ -582,7 +583,10 @@
         ]
       },
       image: {
-        toolbar: ['toggleImageCaption', 'imageTextAlternative', '|', 'imageStyle:inline', 'imageStyle:wrapText', 'imageStyle:breakText', 'linkImage'] // Added linkImage
+        toolbar: ['toggleImageCaption', 'imageTextAlternative', '|', 'imageStyle:inline', 'imageStyle:wrapText', 'imageStyle:breakText', 'linkImage'], // Added linkImage
+        upload: {
+          types: ['jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff', 'svg+xml']
+        }
       },
       initialData:
         '', // Cleared initial data to better see placeholder and dark theme
@@ -728,10 +732,24 @@
 
 
     // Initialize CKEditor
-    ClassicEditor.create(document.querySelector('#editor1'), editorConfig)
+    ClassicEditor.create(document.querySelector('#editor1'), {
+      ...editorConfig,
+      simpleUpload: {
+        uploadUrl: null, // We'll handle upload through the adapter
+        withCredentials: true,
+        headers: {
+          'X-CSRF-TOKEN': 'CSRF-Token',
+        }
+      }
+    })
       .then(newEditor => {
         editor = newEditor; // Assign to the global editor variable
         window.editor = editor; // Make the editor instance globally accessible
+
+        // Configure the Firebase upload adapter
+        editor.plugins.get('FileRepository').createUploadAdapter = loader => {
+          return new FirebaseUploadAdapter(loader, firebase.app());
+        };
 
         // After editor is ready, check auth state and fetch posts if logged in
         awaitForObject(auth).then(() => {
