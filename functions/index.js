@@ -1,4 +1,5 @@
 // functions/index.js
+const functions = require("firebase-functions");
 const { onRequest } = require("firebase-functions/v2/https");
 const { onDocumentWritten } = require("firebase-functions/v2/firestore");
 const logger = require("firebase-functions/logger");
@@ -169,7 +170,8 @@ exports.revalidateBlogContent = onDocumentWritten(
       type: event.type,
     });
 
-    const revalidationToken = functions.config().revalidation.token;
+    // const revalidationToken = functions.config().revalidation.token;
+    const revalidationToken = process.env.NEXT_PRIVATE_REVALIDATION_TOKEN;
     const blogUrl = "https://www.cezary-czerwinski.pl"; // Replace with your actual blog URL if different
 
     if (!revalidationToken) {
