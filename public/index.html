@@ -1108,11 +1108,21 @@
     // --- Utility Functions ---
 
     function showMessage(msg, type) {
+      // Show the existing message display
       messageDiv.textContent = msg;
       messageDiv.className = ''; // Clear previous classes
       messageDiv.classList.add(type); // Add success or error class
       messageDiv.style.display = 'block';
-      // Optional: Hide message after a few seconds
+      
+      // Show a toast notification
+      const toastClasses = type === 'success' ? 'green' : 'red';
+      M.toast({
+        html: msg,
+        classes: toastClasses,
+        displayLength: 4000
+      });
+
+      // Optional: Hide message div after a few seconds
       setTimeout(() => {
         if (messageDiv.textContent === msg) { // Only hide if it's the same message
             messageDiv.style.display = 'none';
