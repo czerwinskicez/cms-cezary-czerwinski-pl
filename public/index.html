@@ -13,7 +13,6 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="./css/main.css">
 
-  <!-- <script src="https://cdn.ckeditor.com/4.25.1-lts/standard-all/ckeditor.js"></script> -->
   <script src="./ckeditor/ckeditor5/ckeditor5.umd.js"></script>
   <script src="./js/materialize.min.js"></script>
 
@@ -75,12 +74,311 @@
       color: #a94442;
       border: 1px solid #ebccd1;
     }
+
+    /* Dark Theme Styles */
+    :root {
+      --dark-bg: #121212; /* Very dark grey, almost black */
+      --dark-surface: #1E1E1E; /* For cards, surfaces */
+      --dark-surface-alt: #2A2A2A; /* Slightly lighter surface or for hover/editor bg */
+      --dark-text: #FFFFFF; /* Pure white for main text, and text on red elements */
+      --dark-text-secondary: #B0B0B0; /* Light grey for secondary text */
+      --dark-border: #444444; /* A darker, more subtle border */
+      --dark-primary: #fafafa; /* Material Design Red 500 - a strong, clear red */
+      --dark-primary-variant: #C62828; /* Material Design Red 700 - darker red for hover/emphasis */
+      --dark-error: #cf6679; /* Use the primary red for errors for consistency */
+      --dark-success: #4CAF50; /* A standard green for success messages */
+    }
+
+    body.dark-theme {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+    
+    body.dark-theme h2.center-align {
+      color: var(--dark-text);
+    }
+
+    body.dark-theme #post-list {
+      border-top: 1px solid var(--dark-border);
+    }
+
+    body.dark-theme .post-item {
+      background: var(--dark-surface);
+      border: 1px solid var(--dark-border);
+      color: var(--dark-text);
+    }
+
+    body.dark-theme .post-item:hover {
+      background: var(--dark-surface-alt);
+    }
+
+    body.dark-theme .post-item .delete-button,
+    body.dark-theme .btn.delete-button { /* Added for the main delete button */
+        background-color: var(--dark-error) !important;
+        color: var(--dark-bg) !important;
+    }
+    body.dark-theme .post-item .delete-button:hover,
+    body.dark-theme .btn.delete-button:hover {
+        background-color: #b00020 !important; /* Darker error for hover */
+    }
+
+
+    body.dark-theme #message.success {
+      background-color: var(--dark-success);
+      color: var(--dark-bg);
+      border: 1px solid #4caf50;
+    }
+
+    body.dark-theme #message.error {
+      background-color: var(--dark-error);
+      color: var(--dark-bg);
+      border: 1px solid #b00020;
+    }
+
+    /* Materialize Dark Theme Overrides */
+    body.dark-theme .card {
+      background-color: var(--dark-surface);
+      color: var(--dark-text);
+      border-radius: 8px; /* Optional: softer edges */
+    }
+
+    body.dark-theme .card .card-title {
+      color: var(--dark-text);
+    }
+    body.dark-theme .card .card-action {
+        border-top: 1px solid var(--dark-border);
+    }
+
+
+    body.dark-theme .input-field label {
+      color: var(--dark-text-secondary);
+    }
+    /* Active/focused label color */
+    body.dark-theme .input-field input[type=text]:not(.browser-default):focus:not([readonly]) + label,
+    body.dark-theme .input-field input[type=email]:not(.browser-default):focus:not([readonly]) + label,
+    body.dark-theme .input-field input[type=password]:not(.browser-default):focus:not([readonly]) + label,
+    body.dark-theme .input-field input[type=date]:not(.browser-default):focus:not([readonly]) + label,
+    body.dark-theme .input-field textarea.materialize-textarea:focus:not([readonly]) + label,
+    body.dark-theme .input-field .file-path-wrapper input.file-path:focus:not([readonly]) + label { /* For file input label */
+      color: var(--dark-primary);
+    }
+    /* Label color when input has value (Materialize adds .active) */
+    body.dark-theme .input-field label.active {
+        color: var(--dark-primary);
+    }
+
+
+    body.dark-theme .input-field input[type=text]:not(.browser-default),
+    body.dark-theme .input-field input[type=email]:not(.browser-default),
+    body.dark-theme .input-field input[type=password]:not(.browser-default),
+    body.dark-theme .input-field input[type=date]:not(.browser-default),
+    body.dark-theme .input-field textarea.materialize-textarea,
+    body.dark-theme .input-field .file-path-wrapper input.file-path {
+      background-color: transparent;
+      border-bottom: 1px solid var(--dark-text-secondary);
+      color: var(--dark-text);
+      caret-color: var(--dark-primary); /* Cursor color */
+    }
+    body.dark-theme .input-field input[type=date]:not(.browser-default) {
+        color-scheme: dark; /* Helps with browser-native date picker theming */
+    }
+
+
+    body.dark-theme .input-field input[type=text]:not(.browser-default):focus:not([readonly]),
+    body.dark-theme .input-field input[type=email]:not(.browser-default):focus:not([readonly]),
+    body.dark-theme .input-field input[type=password]:not(.browser-default):focus:not([readonly]),
+    body.dark-theme .input-field input[type=date]:not(.browser-default):focus:not([readonly]),
+    body.dark-theme .input-field textarea.materialize-textarea:focus:not([readonly]),
+    body.dark-theme .input-field .file-path-wrapper input.file-path:focus:not([readonly]) {
+      border-bottom: 1px solid var(--dark-primary);
+      box-shadow: 0 1px 0 0 var(--dark-primary);
+    }
+
+    body.dark-theme .btn, body.dark-theme .btn-large, body.dark-theme .btn-small {
+      background-color: var(--dark-primary);
+      color: var(--dark-bg);
+    }
+    body.dark-theme .btn:hover, body.dark-theme .btn-large:hover, body.dark-theme .btn-small:hover {
+      background-color: var(--dark-primary-variant);
+    }
+    body.dark-theme .btn.red, body.dark-theme .btn-large.red, body.dark-theme .btn-small.red {
+      background-color: var(--dark-error) !important;
+      color: var(--dark-bg) !important;
+    }
+    body.dark-theme .btn.red:hover, body.dark-theme .btn-large.red:hover, body.dark-theme .btn-small.red:hover {
+      background-color: #b00020 !important;
+    }
+
+    body.dark-theme .collection {
+        border: 1px solid var(--dark-border);
+        border-radius: 4px;
+    }
+    body.dark-theme .collection .collection-item {
+      background-color: var(--dark-surface);
+      border-bottom: 1px solid var(--dark-border);
+      color: var(--dark-text);
+    }
+    body.dark-theme .collection .collection-item:last-child {
+        border-bottom: none;
+    }
+    
+    body.dark-theme .ckeditor-label {
+        color: var(--dark-text-secondary) !important;
+    }
+
+    body.dark-theme #current-hero-image p {
+        color: var(--dark-text-secondary);
+    }
+
+
+    /* CKEditor 5 Dark Theme */
+    body.dark-theme .ck.ck-editor { /* Target the entire editor widget */
+        border-radius: 4px;
+        overflow: hidden; /* Ensures borders are rounded */
+    }
+
+    body.dark-theme .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
+      background-color: var(--dark-surface-alt);
+      color: var(--dark-text);
+      border: 1px solid var(--dark-border);
+      border-top: none; /* Toolbar has top border */
+    }
+
+    body.dark-theme .ck.ck-editor__main > .ck-editor__editable.ck-focused {
+      background-color: var(--dark-surface-alt);
+      color: var(--dark-text);
+      border: 1px solid var(--dark-primary);
+      border-top: none; /* Toolbar has top border */
+      box-shadow: 0 0 0 1px var(--dark-primary); /* Focus ring */
+    }
+    
+    body.dark-theme .ck.ck-editor__editable {
+        min-height: 200px; /* Ensure it has some height */
+        caret-color: var(--dark-primary);
+    }
+
+    body.dark-theme .ck.ck-toolbar {
+      background-color: var(--dark-surface);
+      border: 1px solid var(--dark-border);
+      border-bottom: 1px solid var(--dark-border); /* Separator line */
+    }
+
+    body.dark-theme .ck.ck-button,
+    body.dark-theme .ck.ck-button .ck-button__label {
+      color: var(--dark-text-secondary) !important;
+    }
+    body.dark-theme .ck.ck-button .ck-icon {
+      color: var(--dark-text-secondary) !important;
+      fill: var(--dark-text-secondary) !important; /* For SVG icons */
+    }
+
+    body.dark-theme .ck.ck-button:hover,
+    body.dark-theme .ck.ck-button:hover .ck-button__label {
+      background-color: var(--dark-surface-alt) !important;
+      color: var(--dark-text) !important;
+    }
+    body.dark-theme .ck.ck-button:hover .ck-icon {
+      color: var(--dark-text) !important;
+      fill: var(--dark-text) !important;
+    }
+
+    body.dark-theme .ck.ck-button.ck-on {
+      background-color: var(--dark-primary-variant) !important;
+      color: var(--dark-bg) !important; /* Text on primary */
+    }
+    body.dark-theme .ck.ck-button.ck-on .ck-icon,
+    body.dark-theme .ck.ck-button.ck-on .ck-button__label {
+      color: var(--dark-bg) !important;
+      fill: var(--dark-bg) !important;
+    }
+
+    body.dark-theme .ck.ck-dropdown__panel {
+      background: var(--dark-surface);
+      border-color: var(--dark-border);
+      color: var(--dark-text);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    body.dark-theme .ck.ck-list__item .ck-button:hover {
+        background: var(--dark-surface-alt) !important;
+    }
+
+    body.dark-theme .ck .ck-input {
+      background-color: var(--dark-surface-alt);
+      color: var(--dark-text);
+      border: 1px solid var(--dark-border);
+    }
+    body.dark-theme .ck .ck-input:focus {
+      border-color: var(--dark-primary);
+    }
+
+    body.dark-theme .ck .ck-labeled-field-view__label {
+        color: var(--dark-text-secondary);
+    }
+
+    body.dark-theme .ck-editor__editable.ck-placeholder::before {
+      color: var(--dark-text-secondary);
+    }
+
+    body.dark-theme .ck.ck-heading_paragraph,
+    body.dark-theme .ck.ck-heading_heading1,
+    body.dark-theme .ck.ck-heading_heading2,
+    body.dark-theme .ck.ck-heading_heading3,
+    body.dark-theme .ck.ck-heading_heading4,
+    body.dark-theme .ck.ck-heading_heading5,
+    body.dark-theme .ck.ck-heading_heading6 {
+        color: var(--dark-text) !important;
+    }
+
+    body.dark-theme .ck-content.ck-editor__editable {
+        color: var(--dark-text);
+    }
+    body.dark-theme .ck-content.ck-editor__editable h1,
+    body.dark-theme .ck-content.ck-editor__editable h2,
+    body.dark-theme .ck-content.ck-editor__editable h3,
+    body.dark-theme .ck-content.ck-editor__editable h4,
+    body.dark-theme .ck-content.ck-editor__editable h5,
+    body.dark-theme .ck-content.ck-editor__editable h6 {
+        color: var(--dark-text);
+    }
+    body.dark-theme .ck-content.ck-editor__editable a {
+        color: var(--dark-primary-variant);
+    }
+    body.dark-theme .ck-content.ck-editor__editable a:hover {
+        color: var(--dark-primary);
+    }
+
+    body.dark-theme .ck-content.ck-editor__editable pre {
+        background-color: #272822; /* Monokai-like background */
+        color: #f8f8f2; /* Light text for code */
+        border: 1px solid var(--dark-border);
+        border-radius: 4px;
+        padding: 1em;
+        overflow-x: auto;
+    }
+    body.dark-theme .ck-content.ck-editor__editable code {
+        background-color: var(--dark-surface-alt);
+        color: var(--dark-text);
+        padding: .2em .4em;
+        border-radius: 3px;
+    }
+    body.dark-theme .ck-content.ck-editor__editable pre code { /* Code inside pre should not have extra bg */
+        background-color: transparent;
+        padding: 0;
+        border-radius: 0;
+    }
+    body.dark-theme .ck.ck-source-editing-area textarea {
+        background-color: var(--dark-surface-alt);
+        color: var(--dark-text);
+        caret-color: var(--dark-primary);
+        font-family: "Source Code Pro", monospace;
+    }
+
   </style>
 
   <link rel="stylesheet" href="./ckeditor/ckeditor5/ckeditor5.css">
 </head>
 
-<body>
+<body class="dark-theme">
   <main class="container">
     <div id="login-container">
       <div class="card">
@@ -151,7 +449,7 @@
                 <label for="post-title">Post Title</label>
               </div>
 
-              <label style="font-size: 0.8rem; color: #9e9e9e; display: block; margin-top:15px;">Post Content</label>
+              <label class="ckeditor-label" style="font-size: 0.8rem; display: block; margin-top:15px;">Post Content</label>
               <div class="ckeditor-container">
                 <textarea id="editor1" name="editor1"></textarea>
               </div>
@@ -160,22 +458,27 @@
               <div class="input-field file-field">
                 <div class="btn">
                   <span>Hero image</span>
-                  <input type="file" accept="image/*">
+                  <input type="file" accept="image/*" id="hero-image-upload">
                 </div>
                 <div class="file-path-wrapper">
                   <input type="text" class="file-path validate">
                 </div>
               </div>
+              <div id="current-hero-image" style="margin-top: 10px; display: none;">
+                <p>Current Image:</p>
+                <img src="" alt="Hero Image" style="max-width: 200px; height: auto; display: block; margin-top: 5px;">
+                <button id="remove-hero-image" class="btn waves-effect waves-light red lighten-2" style="margin-top: 5px;">Remove Image</button>
+              </div>
 
-              <div class="button-group">
+
+              <div class="button-group" style="margin-top: 20px;">
                 <button id="save-post-button" class="btn waves-effect waves-light">
                   <i class="material-icons left">save</i>Save Post
                 </button>
                 <button id="new-post-button" class="btn waves-effect waves-light">
                   <i class="material-icons left">add_circle_outline</i>New Post
                 </button>
-                <button id="delete-post-button" class="btn waves-effect waves-light delete-button"
-                  style="display: none;">
+                <button id="delete-post-button" class="btn waves-effect waves-light delete-button" style="display: none;">
                   <i class="material-icons left">delete</i>Delete Post
                 </button>
               </div>
@@ -209,8 +512,8 @@
     const editorConfig = {
       toolbar: {
         items: [
-          'undo', 'redo', '|', 'sourceEditing', 'showBlocks', 'textPartLanguage', '|', 'heading', 'style', '|', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'code', 'removeFormat', '|', 'specialCharacters', 'horizontalLine', 'link', 'bookmark', 'insertImage', 'insertImageViaUrl', 'insertTable', 'insertTableLayout', 'highlight', 'blockQuote', 'codeBlock', 'htmlEmbed', '|', 'alignment', '|', 'outdent', 'indent'
-        ],
+          'undo', 'redo', '|', 'sourceEditing', 'showBlocks', 'textPartLanguage', '|', 'heading', 'style', '|', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'code', 'removeFormat', '|', 'specialCharacters', 'horizontalLine', 'link', 'bookmark', 'insertImage', 'insertImageViaUrl', 'insertTable', /* 'insertTableLayout', */ 'highlight', 'blockQuote', 'codeBlock', 'htmlEmbed', '|', 'alignment', '|', 'outdent', 'indent'
+        ], // Removed insertTableLayout as it might be part of a premium plugin not listed
         shouldNotGroupWhenFull: false
       },
       plugins: [
@@ -279,10 +582,10 @@
         ]
       },
       image: {
-        toolbar: ['toggleImageCaption', 'imageTextAlternative', '|', 'imageStyle:inline', 'imageStyle:wrapText', 'imageStyle:breakText']
+        toolbar: ['toggleImageCaption', 'imageTextAlternative', '|', 'imageStyle:inline', 'imageStyle:wrapText', 'imageStyle:breakText', 'linkImage'] // Added linkImage
       },
       initialData:
-        '<h2>Enter title</h2><div>Put content</div>',
+        '', // Cleared initial data to better see placeholder and dark theme
       licenseKey: LICENSE_KEY,
       link: {
         addTargetToExternalLinks: true,
@@ -297,9 +600,9 @@
           }
         }
       },
-      menuBar: {
-        isVisible: true
-      },
+      // menuBar: { // menuBar is not a standard CKEditor 5 config, might be from a custom build or v4
+      //   isVisible: true
+      // },
       placeholder: 'Type or paste your content here!',
       style: {
         definitions: [
@@ -347,6 +650,11 @@
       },
       table: {
         contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties']
+      },
+      wordCount: { // Ensure word count plugin is configured if used
+          onUpdate: stats => {
+              // console.log( `Characters: ${ stats.characters }\nWords: ${ stats.words }` );
+          }
       }
     };
 
@@ -354,8 +662,9 @@
   <script>
     const awaitForObject = object => {
       return new Promise((resolve, _reject) => {
-        setInterval(() => {
+        const interval = setInterval(() => {
           if (object) {
+            clearInterval(interval); // Clear the interval once the object is available
             resolve(object);
           }
         }, 100);
@@ -365,10 +674,10 @@
     // Your web app's Firebase configuration
     // Replace with your actual config
     const firebaseConfig = {
-      apiKey: "AIzaSyBEiGe94VepHS85NG7gOS47MynMBdHsqFQ",
+      apiKey: "AIzaSyBEiGe94VepHS85NG7gOS47MynMBdHsqFQ", // Keep your actual API key
       authDomain: "cezary-czerwinski-pl.firebaseapp.com",
       projectId: "cezary-czerwinski-pl",
-      storageBucket: "cezary-czerwinski-pl.firebasestorage.app",
+      storageBucket: "cezary-czerwinski-pl.firebasestorage.app", // Corrected if it was firebasestorage.app
       messagingSenderId: "579328886251",
       appId: "1:579328886251:web:2365538a3cdbe261e605ae"
     };
@@ -389,7 +698,19 @@
     const logoutButton = document.getElementById('logout-button');
 
     const postIdInput = document.getElementById('post-id');
+    const postSlugInput = document.getElementById('post-slug');
+    const postDateInput = document.getElementById('post-date');
+    const postCategoryInput = document.getElementById('post-category');
+    const postExcerptInput = document.getElementById('post-excerpt');
+    const postTagsInput = document.getElementById('post-tags');
+    const postReadingTimeInput = document.getElementById('post-reading-time');
     const postTitleInput = document.getElementById('post-title');
+    const heroImageFileInput = document.getElementById('hero-image-upload');
+    const heroImageFilePath = document.querySelector('.file-path'); // For Materialize file input display
+    const currentHeroImageDiv = document.getElementById('current-hero-image');
+    const currentHeroImageImg = currentHeroImageDiv.querySelector('img');
+    const removeHeroImageButton = document.getElementById('remove-hero-image');
+
     const postsUl = document.getElementById('posts-ul');
     const savePostButton = document.getElementById('save-post-button');
     const newPostButton = document.getElementById('new-post-button');
@@ -398,37 +719,48 @@
 
     let editor;
 
-    ClassicEditor.create(document.querySelector('#editor1'), editorConfig).then(editor => {
-      // const wordCount = editor.plugins.get('WordCount');
-      // document.querySelector('#editor-word-count').appendChild(wordCount.wordCountContainer);
-
-      // document.querySelector('#editor-menu-bar').appendChild(editor.ui.view.menuBarView.element);
-
-      window.editor = editor; // Make the editor instance globally accessible
-
-      awaitForObject(auth).then(_ => {
-        auth.onAuthStateChanged(user => {
-          if (user) {
-            fetchPosts(); // Fetch posts when user logs in and editor is ready
-          }
-        });
-      });
-      return editor;
+    // Initialize Materialize components after DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        M.AutoInit(); // Auto initialize all Materialize components
+        // If specific initialization is needed, do it here.
+        // e.g. var elems = document.querySelectorAll('.datepicker'); M.Datepicker.init(elems, {});
     });
 
+
+    // Initialize CKEditor
+    ClassicEditor.create(document.querySelector('#editor1'), editorConfig)
+      .then(newEditor => {
+        editor = newEditor; // Assign to the global editor variable
+        window.editor = editor; // Make the editor instance globally accessible
+
+        // After editor is ready, check auth state and fetch posts if logged in
+        awaitForObject(auth).then(() => {
+          auth.onAuthStateChanged(user => {
+            if (user) {
+              fetchPosts(); // Fetch posts when user logs in and editor is ready
+            }
+          });
+        });
+        return editor;
+      })
+      .catch(error => {
+        console.error('There was a problem initializing the editor.', error);
+      });
+
     // Listen for auth state changes
-    awaitForObject(auth).then(_ => {
+    awaitForObject(auth).then(() => {
       auth.onAuthStateChanged(user => {
         if (user) {
           // User is signed in
           loginContainer.style.display = 'none';
           cmsContainer.style.display = 'block';
           loginError.style.display = 'none';
-          if (editor) {
-            fetchPosts(); // Fetch posts when user logs in and editor is ready
+          if (editor) { // Ensure editor is ready before fetching posts
+            fetchPosts();
           } else {
             console.log("CKEditor not ready, will fetch posts when it is.");
           }
+          M.updateTextFields(); // Ensure labels are active for any pre-filled user data fields if any
         } else {
           // User is signed out
           loginContainer.style.display = 'block';
@@ -443,6 +775,7 @@
     loginButton.addEventListener('click', async () => {
       const email = loginEmailInput.value;
       const password = loginPasswordInput.value;
+      loginButton.disabled = true; // Prevent multiple clicks
 
       try {
         await auth.signInWithEmailAndPassword(email, password);
@@ -451,6 +784,8 @@
         console.error("Login Error:", error);
         loginError.textContent = error.message;
         loginError.style.display = 'block';
+      } finally {
+        loginButton.disabled = false;
       }
     });
 
@@ -466,40 +801,71 @@
       }
     });
 
+    // Handle remove hero image button
+    removeHeroImageButton.addEventListener('click', async () => {
+        const postId = postIdInput.value;
+        if (postId) {
+            if (confirm('Are you sure you want to remove the hero image?')) {
+                try {
+                    const docRef = db.collection('posts').doc(postId);
+                    const doc = await docRef.get();
+                    if (doc.exists && doc.data().heroImageUrl) {
+                        const imageUrl = doc.data().heroImageUrl;
+                        // Get reference to the image in storage
+                        const imageRef = storage.refFromURL(imageUrl);
+                        await imageRef.delete(); // Delete from storage
+                        await docRef.update({ heroImageUrl: firebase.firestore.FieldValue.delete() }); // Remove from Firestore
+                        showMessage('Hero image removed successfully!', 'success');
+                        currentHeroImageDiv.style.display = 'none';
+                        currentHeroImageImg.src = '';
+                        heroImageFileInput.value = ''; // Clear the file input
+                        heroImageFilePath.value = ''; // Clear file path display
+                    }
+                } catch (error) {
+                    console.error("Error removing hero image:", error);
+                    showMessage('Error removing hero image.', 'error');
+                }
+            }
+        } else {
+            // If no postId, just clear the local file input if a file was selected
+            heroImageFileInput.value = '';
+            heroImageFilePath.value = '';
+            currentHeroImageDiv.style.display = 'none';
+            currentHeroImageImg.src = '';
+            showMessage('Hero image cleared from form.', 'success');
+        }
+    });
+
     // --- Firestore Operations ---
 
     // Fetch and display posts
     async function fetchPosts() {
-      // if (!editor) {
-      //   console.log("CKEditor not ready, cannot fetch posts yet.");
-      //   return; // Don't fetch if editor isn't ready
-      // }
-      postsUl.innerHTML = '<li>Loading posts...</li>'; // Show loading state
+      postsUl.innerHTML = '<li class="collection-item">Loading posts...</li>'; // Show loading state
       try {
         const snapshot = await db.collection('posts').orderBy('createdAt', 'desc').get();
         postsUl.innerHTML = ''; // Clear loading state
 
         if (snapshot.empty) {
-          postsUl.innerHTML = '<li>No posts found.</li>';
+          postsUl.innerHTML = '<li class="collection-item">No posts found.</li>';
           return;
         }
 
         snapshot.forEach(doc => {
           const post = doc.data();
           const li = document.createElement('li');
-          li.classList.add('post-item');
+          li.classList.add('post-item', 'collection-item'); // Added collection-item for Materialize styling
           li.dataset.id = doc.id;
-          li.innerHTML = `<span>${post.title}</span> <button class="delete-button">Delete</button>`;
+          li.innerHTML = `<span>${post.title || 'Untitled'} (${new Date(post.createdAt?.toDate() || Date.now()).toLocaleDateString()})</span> <button class="delete-button btn-small waves-effect waves-light red">Delete</button>`;
           li.querySelector('span').addEventListener('click', () => loadPostForEditing(doc.id));
           li.querySelector('.delete-button').addEventListener('click', (e) => {
             e.stopPropagation(); // Prevent triggering loadPostForEditing
-            deletePost(doc.id);
+            deletePost(doc.id, post.heroImageUrl); // Pass heroImageUrl for deletion from storage
           });
           postsUl.appendChild(li);
         });
       } catch (error) {
         console.error("Error fetching posts:", error);
-        postsUl.innerHTML = '<li>Error loading posts.</li>';
+        postsUl.innerHTML = '<li class="collection-item">Error loading posts.</li>';
         showMessage('Error fetching posts.', 'error');
       }
     }
@@ -511,10 +877,42 @@
         if (doc.exists) {
           const post = doc.data();
           postIdInput.value = doc.id;
-          postTitleInput.value = post.title;
-          window.editor.setData(post.content); // Load content into CKEditor
+          postTitleInput.value = post.title || '';
+          editor.setData(post.content || ''); // Load content into CKEditor
+
+          // Populate all other fields
+          postSlugInput.value = post.slug || '';
+          if (post.date && post.date.toDate) {
+            const postDate = post.date.toDate();
+            postDateInput.value = postDate.toISOString().split('T')[0];
+          } else {
+            postDateInput.value = '';
+          }
+          postCategoryInput.value = post.category || '';
+          postExcerptInput.value = post.excerpt || '';
+          M.textareaAutoResize(postExcerptInput); // Resize textarea if needed
+          postTagsInput.value = (post.tags && Array.isArray(post.tags)) ? post.tags.join(', ') : '';
+          postReadingTimeInput.value = post.readingTime || '';
+
+          // Handle hero image display
+          heroImageFileInput.value = ''; // Clear previous file selection
+          heroImageFilePath.value = ''; // Clear file input display on load
+          if (post.heroImageUrl) {
+            currentHeroImageImg.src = post.heroImageUrl;
+            currentHeroImageDiv.style.display = 'block';
+            // To show filename if desired, you'd need to store it or derive from URL
+            // For now, just showing the image.
+          } else {
+            currentHeroImageDiv.style.display = 'none';
+            currentHeroImageImg.src = '';
+          }
+          
+
+          // Update Materialize CSS labels to "active" for pre-filled fields
+          M.updateTextFields();
+
           deletePostButton.style.display = 'inline-block'; // Show delete button
-          showMessage(`Editing post: "${post.title}"`, 'success');
+          showMessage(`Editing post: "${post.title || 'Untitled'}"`, 'success');
         } else {
           console.warn("Post not found:", postId);
           showMessage('Post not found.', 'error');
@@ -527,37 +925,104 @@
 
     // Save or update a post
     savePostButton.addEventListener('click', async () => {
-      const postId = postIdInput.value;
+      savePostButton.disabled = true; // Prevent multiple clicks
+      const currentPostId = postIdInput.value; // Use a different variable name
       const title = postTitleInput.value;
-      const content = window.editor.getData(); // Get data from CKEditor
+      const content = editor.getData(); // Get data from CKEditor
 
-      if (!title || !content) {
-        showMessage('Title and content cannot be empty.', 'error');
+      // Get values from all new input fields
+      const slug = postSlugInput.value;
+      const date = postDateInput.value;
+      const category = postCategoryInput.value;
+      const excerpt = postExcerptInput.value;
+      const tags = postTagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+      const readingTime = postReadingTimeInput.value;
+      const heroImageFile = heroImageFileInput.files[0]; // Get the selected file
+
+      if (!title) { // Content can sometimes be legitimately empty (e.g. placeholder removal)
+        showMessage('Title cannot be empty.', 'error');
+        savePostButton.disabled = false;
         return;
       }
 
       const postData = {
         title: title,
         content: content,
+        slug: slug || title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''), // Auto-generate slug if empty
+        date: date ? firebase.firestore.Timestamp.fromDate(new Date(date)) : firebase.firestore.Timestamp.now(), // Default to now if not set
+        category: category,
+        excerpt: excerpt,
+        tags: tags,
+        readingTime: readingTime,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
 
       try {
-        if (postId) {
+        let docRef;
+        let existingHeroImageUrl = null;
+
+        if (currentPostId) {
+            docRef = db.collection('posts').doc(currentPostId);
+            const existingDoc = await docRef.get();
+            if (existingDoc.exists) {
+                existingHeroImageUrl = existingDoc.data().heroImageUrl;
+            }
+        } else {
+            docRef = db.collection('posts').doc(); // Prepare a new doc ref to get ID
+            postData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        }
+        const finalPostId = docRef.id; // This will be the new ID or existing ID
+
+
+        if (heroImageFile) {
+            // If there's an old image and it's different from the new one (or if new post), delete old.
+            if (existingHeroImageUrl) {
+                try {
+                    const oldImageRef = storage.refFromURL(existingHeroImageUrl);
+                    await oldImageRef.delete();
+                } catch (deleteError) {
+                    console.warn("Could not delete old image during update:", deleteError);
+                }
+            }
+            // Upload new hero image
+            const imagePath = `post_images/${finalPostId}/${Date.now()}_${heroImageFile.name}`; // Ensure unique name
+            const imageRef = storage.ref().child(imagePath);
+            const snapshot = await imageRef.put(heroImageFile);
+            postData.heroImageUrl = await snapshot.ref.getDownloadURL();
+        } else if (currentPostId && existingHeroImageUrl) {
+            // No new file, but editing existing post, retain existing heroImageUrl
+            postData.heroImageUrl = existingHeroImageUrl;
+        } else {
+             // No new file, and either new post or existing post had no image.
+             // Or image was removed via "Remove Image" button (handled by that button's logic already by setting field to delete)
+             // If heroImageUrl was explicitly removed by "Remove Image", it would be handled there.
+             // If no file is selected, and it's a new post, heroImageUrl will be undefined.
+             // If no file is selected, and it's an existing post without an image, heroImageUrl will be undefined.
+             // If an image existed and we want to remove it by not selecting a file, we need to explicitly delete the field.
+             // However, the remove button handles this. If we simply don't select a file, we intend to keep the old one.
+             if (currentPostId && existingHeroImageUrl === undefined && postData.heroImageUrl === undefined) {
+                // This case should mean the field is removed if it was there, or stays not there.
+                // No specific action needed here if the "Remove Image" button did its job.
+             }
+        }
+
+
+        if (currentPostId) {
           // Update existing post
-          await db.collection('posts').doc(postId).update(postData);
+          await docRef.update(postData);
           showMessage('Post updated successfully!', 'success');
         } else {
-          // Create new post
-          postData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-          await db.collection('posts').add(postData);
+          // Create new post using the pre-generated docRef
+          await docRef.set(postData);
           showMessage('Post created successfully!', 'success');
           clearPostForm(); // Clear form after creating a new post
         }
         fetchPosts(); // Refresh the list
       } catch (error) {
         console.error("Error saving post:", error);
-        showMessage('Error saving post.', 'error');
+        showMessage('Error saving post: ' + error.message, 'error');
+      } finally {
+        savePostButton.disabled = false;
       }
     });
 
@@ -570,23 +1035,49 @@
     function clearPostForm() {
       postIdInput.value = '';
       postTitleInput.value = '';
-      window.editor.setData(''); // Clear CKEditor content
+      editor.setData(''); // Clear CKEditor content
+
+      // Clear all other fields
+      postSlugInput.value = '';
+      postDateInput.valueAsDate = new Date(); // Default to today
+      postCategoryInput.value = '';
+      postExcerptInput.value = '';
+      M.textareaAutoResize(postExcerptInput);
+      postTagsInput.value = '';
+      postReadingTimeInput.value = '';
+      heroImageFileInput.value = ''; // Clear the file input itself
+      heroImageFilePath.value = ''; // Clear the Materialize file input display
+      currentHeroImageDiv.style.display = 'none'; // Hide current image preview
+      currentHeroImageImg.src = ''; // Clear image src
+
+      // Update Materialize CSS labels
+      M.updateTextFields();
+
       deletePostButton.style.display = 'none'; // Hide delete button
     }
 
     // Delete a post
-    async function deletePost(postId) {
+    async function deletePost(postIdToDelete, heroImageUrl) { // Renamed postId to avoid conflict
       if (confirm('Are you sure you want to delete this post?')) {
         try {
-          // Delete the document from Firestore
-          await db.collection('posts').doc(postId).delete();
+          // Delete associated hero image from Storage if it exists
+          if (heroImageUrl) {
+            try {
+              const imageRef = storage.refFromURL(heroImageUrl);
+              await imageRef.delete();
+            } catch (storageError) {
+              console.warn("Could not delete hero image from storage:", storageError);
+              // Continue with document deletion even if image deletion fails
+            }
+          }
 
-          // TODO: Implement deletion of associated files from Storage if any were linked.
-          // This would involve parsing the post.content HTML for image URLs pointing to your Storage bucket
-          // and deleting those files. This is complex and omitted for this basic example.
+          // Delete the document from Firestore
+          await db.collection('posts').doc(postIdToDelete).delete();
 
           showMessage('Post deleted successfully!', 'success');
-          clearPostForm(); // Clear form if the deleted post was being edited
+          if (postIdInput.value === postIdToDelete) { // If the deleted post was being edited
+            clearPostForm();
+          }
           fetchPosts(); // Refresh the list
         } catch (error) {
           console.error("Error deleting post:", error);
@@ -605,7 +1096,9 @@
       messageDiv.style.display = 'block';
       // Optional: Hide message after a few seconds
       setTimeout(() => {
-        messageDiv.style.display = 'none';
+        if (messageDiv.textContent === msg) { // Only hide if it's the same message
+            messageDiv.style.display = 'none';
+        }
       }, 5000);
     }
 

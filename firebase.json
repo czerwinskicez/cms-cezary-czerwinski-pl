@@ -16,6 +16,10 @@
         "function": "subscribeToNewsletter"
       },
       {
+        "source": "/contactMessage",
+        "function": "sendContactMessage"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

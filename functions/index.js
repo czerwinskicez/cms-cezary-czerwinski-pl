@@ -18,6 +18,14 @@ function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
+// CORS headers for preflight and actual requests
+const allowedOrigins = [
+  "https://cms.cezary-czerwinski.pl", 
+  "https://www.cezary-czerwinski.pl", 
+  "https://cezary-czerwinski.pl", 
+  "http://localhost:3000"
+];
+
 /**
  * Newsletter Subscription HTTP Function (2nd gen)
  * Region: Warsaw (europe-central2)
@@ -25,24 +33,12 @@ function isValidEmail(email) {
 exports.subscribeToNewsletter = onRequest(
   {
     region: "europe-central2",
-    // You can add other v2 options here, e.g. memory, minInstances, timeoutSeconds, etc.
   },
   async (req, res) => {
-    
-    // CORS headers for preflight and actual requests
-    const allowedOrigins = [
-      "https://cms.cezary-czerwinski.pl", 
-      "https://cezary-czerwinski.pl", 
-      "http://localhost:3000"
-    ];
     const origin = req.headers.origin;
-
     if (allowedOrigins.includes(origin)) {
       res.set("Access-Control-Allow-Origin", origin);
     } 
-
-    // res.set("Access-Control-Allow-Origin", "*");
-
     res.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
     res.set("Access-Control-Allow-Headers", "Content-Type");
 
@@ -99,6 +95,62 @@ exports.subscribeToNewsletter = onRequest(
     } catch (error) {
       logger.error("Error subscribing to newsletter:", error);
       res.status(500).json({ success: false, message: "An error occurred. Please try again." });
+    }
+  }
+);
+
+/**
+ * Send Contact Message HTTP Function (2nd gen)
+ * Region: Warsaw (europe-central2)
+ */
+exports.sendContactMessage = onRequest(
+  { region: "europe-central2" },
+  async (req, res) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.set("Access-Control-Allow-Origin", origin);
+    }
+    res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
+
+    if (req.method === "OPTIONS") {
+      return res.status(204).send("");
+    }
+    if (req.method !== "POST") {
+      return res.status(405).send("Method Not Allowed");
+    }
+
+    const { name, email, message } = req.body;
+    if (
+      !name || typeof name !== "string" ||
+      !email || typeof email !== "string" || !isValidEmail(email) ||
+      !message || typeof message !== "string"
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or missing fields. 'name', 'email' (valid), and 'message' are required."
+      });
+    }
+
+    try {
+      const messagesRef = db.collection("contactMessages");
+      const docData = {
+        name: name.trim(),
+        email: email.toLowerCase(),
+        message: message.trim(),
+        sentAt: FieldValue.serverTimestamp(),
+        req: {
+          headers: req.headers,
+          ip: req.ip || req.headers["x-forwarded-for"] || req.connection.remoteAddress || null
+        }
+      };
+
+      await messagesRef.add(docData);
+      logger.info(`New contact message from ${email}`);
+      return res.status(201).json({ success: true, message: "Message sent successfully!" });
+    } catch (error) {
+      logger.error("Error sending contact message:", error);
+      return res.status(500).json({ success: false, message: "An error occurred. Please try again." });
     }
   }
 );
